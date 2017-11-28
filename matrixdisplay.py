@@ -67,7 +67,7 @@ class MatrixDispaly:
 	def clear_screen(self):
 		# Clear screen 
 		for i in range(self._led_strip.numPixels()):
-			self._led_strip.setPixelColor(i, Color(255, 0, 0))
+			self._led_strip.setPixelColor(i, Color(0, 0, 0))
 		self._led_strip.show()
 
 	def fill_screen(self, color):

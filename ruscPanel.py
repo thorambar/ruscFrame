@@ -2,6 +2,7 @@
 # Thorambar Dae Rusc 2017
 
 import time
+from random import randint
 
 import frame
 import matrixdisplay
@@ -42,16 +43,24 @@ def draw_line( frame, sp=(0,0), ep=(0,0), color=(255, 255, 0) ):
 	if swapped:						# Reverse the list if the coordinates were swapped
 		points.reverse()
 	for obj in points:
+		x, y = obj
 		frame.set_pixel(x, y, color)
 
 def main():
 	# create a connection to the display with size 8 
 	with matrixdisplay.MatrixDispaly(DDIM) as display:
 		fr = frame.Frame(DDIM)
-		draw_line(fr, (0,0), (4,4))
-		#display.draw_frame(fr)
-		#time.sleep(1)
-		#display.clear_screen()
+		while True:
+			for i in range(0,8):
+				for j in range(0,8):
+					draw_line(fr, (i,j), (j,i), (randint(20,250), 0, randint(20,250) ))
+					display.draw_frame(fr)
+					#time.sleep(0.1)
+					#display.clear_screen()
+					#fr = frame.Frame(DDIM)
+					#time.sleep(0.1)
+
+
 		t = 0.09
 		while True:
 			display.fill_screen((0, 255, 0))
