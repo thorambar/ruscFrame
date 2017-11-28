@@ -146,7 +146,7 @@ def draw_in_Matrix( x, y, matrix, color=(255, 0, 0) ):
 
 def matrix_to_strip(matrix, strip, res):
 	for i in range(0, res):
-		for j in range(o, res):
+		for j in range(0, res):
 			color = matrix[i][j]
 			strip.setPixelColor(cords_to_pixnum(i, j, res), color)
 	strip.show()
