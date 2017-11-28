@@ -4,7 +4,6 @@
 
 import numpy as np
 import sys
-import matplotlib.pyplot as plt
 import PIL as pil
 from PIL import ImageFont, ImageDraw
 import bitmapfont
@@ -141,10 +140,7 @@ def draw_in_Matrix( x, y, matrix, color=(255, 0, 0) ):
 
 	
 # ++++ Debug stuff and test display +++++++++++++++++++++++++++++++++++++++
-def display_image(image):
-	plt.imshow(image)
-	plt.show()
-	#alternativ einfach .show von pil benutzen
+
 
 
 
