@@ -167,12 +167,14 @@ strip.begin()
 im = pil.Image.open('img/mario.jpg')
 nim = to_pix(im, resolutuion)
 matrix_to_strip(nim, strip, resolutuion)
-#displayImage(nim)
+
+time.sleep(2)
 
 
-#matrix = new_canvas(resolutuion)
-#with bitmapfont.BitmapFont(resolutuion, resolutuion, draw_in_Matrix) as bf:
-	#bf.text('hallo Welt', 2, 0, matrix, (94, 94, 2))
+matrix = new_canvas(resolutuion)
+with bitmapfont.BitmapFont(resolutuion, resolutuion, draw_in_Matrix) as bf:
+	bf.text('hallo Welt', 2, 0, matrix, (94, 94, 2))
+matrix_to_strip(matrix, strip, resolutuion)	
 
 
 
