@@ -7,9 +7,10 @@ import sys
 import matplotlib.pyplot as plt
 import PIL as pil
 from PIL import ImageFont, ImageDraw
+import bitmapfont
 
 # ==== Image to pixel conversion ==========================================
-def toPix(image, res):
+def to_pix(image, res):
 	img = image.resize((res, res)).convert('RGB') # AA maybe bad
 	pixels = np.zeros( (res,res,3), dtype=np.uint8 ) # 8 bit for 0-255 values of RGB
 	for i in range(0, res):
@@ -18,10 +19,10 @@ def toPix(image, res):
 	return pixels
 
 # ==== Draw methods for different shapes ==================================
-def newCanvas( res ):
+def new_canvas( res ):
 	return np.zeros( (res,res,3), dtype=np.uint8 )
 
-def drawLine( image, sp=(0,0), ep=(0,0), color=(255, 255, 255) ):
+def draw_line( image, sp=(0,0), ep=(0,0), color=(255, 255, 255) ):
 	# Bresenham-Line Algorithm
 	x1, y1 = sp
 	x2, y2 = ep
@@ -55,7 +56,7 @@ def drawLine( image, sp=(0,0), ep=(0,0), color=(255, 255, 255) ):
 		image[obj[0]][obj[1]] = color
 	return image
 
-def drawCircle( image, cp=(0, 0), radius=0, color=(255, 255, 255) ):
+def draw_circle( image, cp=(0, 0), radius=0, color=(255, 255, 255) ):
 	# Bresenham-Circle ALgorithm 
 	x0, y0 = cp
 	f = 1 - radius
@@ -87,17 +88,27 @@ def drawCircle( image, cp=(0, 0), radius=0, color=(255, 255, 255) ):
 
 	return image
 
-def drawText(image, str):
+def draw_text(image, str):
 	font = ImageFont.load_default()
 	img = pil.Image.new('RGB', (16, 16))
 	img = ImageDraw.Draw(img)
 	img.text((10, 10), str, font=font)
 	return toPix(img, resolutuion)
-	
+
+def cords_to_pixnum(x, y, res):
+	return x + y * res
+
+def pix_to_cords(num, res):
+	return ( (num % res), floor(num / res) )
+
+def draw_in_Matrix( x, y, matrix, color=(255, 0, 0) ):
+	matrix[y][x] = color
+	return matrix
+
 
 	
 # ++++ Debug stuff and test display +++++++++++++++++++++++++++++++++++++++
-def displayImage(image):
+def display_image(image):
 	plt.imshow(image)
 	plt.show()
 	#alternativ einfach .show von pil benutzen
@@ -107,15 +118,22 @@ def displayImage(image):
 # ==== Main code ==========================================================
 resolutuion = 16
 
-im = pil.Image.open('fox.jpg')
-nim = toPix(im, resolutuion)
+im = pil.Image.open('img/fox.jpg')
+nim = to_pix(im, resolutuion)
 #displayImage(nim)
 
-matrix = newCanvas(resolutuion)
+matrix = new_canvas(resolutuion)
+with bitmapfont.BitmapFont(resolutuion, resolutuion, draw_in_Matrix) as bf:
+	bf.text('hallo Welt', 2, 0, matrix, (94, 94, 2))
+
+
+
+
+
+
 #drawLine(matrix, (8,8), (8, 13), (255, 50, 87) )
 #drawCircle(matrix, (8,8), 6, (32, 64, 128))
-drawText(matrix, 'T')
-displayImage(matrix)
+display_image(matrix)
 
 
 
