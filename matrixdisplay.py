@@ -4,10 +4,16 @@
 # Thorambar Dae Rusc 2017
 
 from neopixel import *
+import frame
+
+import argparse
+import signal
+import sys
+
 
 class MatrixDispaly:
 
-	def __init__(self, dim, ledpin=18, ledfreq=800000, leddma=5, ledbrightness=5, invert=False, ledchannel=0, ledstriptype=ws.WS2811_STRIP_GRB):
+	def __init__(self, dim, ledpin=18, ledfreq=800000, leddma=5, ledbrightness=5, inverted=False, ledchannel=0, ledstriptype=ws.WS2811_STRIP_GRB):
 		# LED strip configuration:
 		self._led_dim = dim
 		self._led_count = dim * dim
@@ -20,52 +26,57 @@ class MatrixDispaly:
 		self._led_strip_type = ledstriptype
 		self._led_strip = None
 
-
 	def init(self):
-		self._led_strip = Adafruit_NeoPixel(_led_count, _led_pin, _led_freq_hz, _led_dma, _led_brightness, _led_invert, _led_channel, _led_strip_type)
+		self._led_strip = Adafruit_NeoPixel(self._led_count, self._led_pin, self._led_freq_hz, self._led_dma, \
+			self._led_invert, self._led_brightness, self._led_channel, self._led_strip_type)
+		self._led_strip.begin()
 
-	
+
 	def deinit(self):
-		clear_screen()
+		self.clear_screen
 
-	
 	def __enter__(self):
 		self.init()
 		return self
 
-	
 	def __exit__(self, exception_type, exception_value, traceback):
 		self.deinit()
 
-	
-	def draw_frame(self, matrix):
-		# Will only need a matrix of RGB values and draws it
-		for i in range(0, dim):
-			for j in range(0, dim):
-				r, g, b = matrix[i][j]
-				strip.setPixelColor(cords_to_pixnum(i, j, res), Color(r, g, b))
-		strip.show()
+	def draw_frame(self, frame):
+		# Will only need a frame of RGB values and draws it
+		for i in range(0, self._led_dim):
+			for j in range(0, self._led_dim):
+				r, g, b = frame.get_pixel(i, j)
+				self._led_strip.setPixelColor( self.cords_to_pixnum(i, j, self._led_dim), Color(r, g, b) )
+		self._led_strip.show()
+		
 
-	
 	def set_brigtnes(self, brightness):
 		self._led_brightness = brightness
 		self._led_strip.setBrightness(_led_brightness)
 
-	
 	def get_brightnes(self):
 		return self._led_brightness
 
-	
 	def get_dim(self):
 		return self._led_dim
 
-	
-	def get_led:count(self):
+	def get_ledcount(self):
 		return self._led_count
 
-	
-	def clear_screen():
+	def clear_screen(self):
 		# Clear screen 
 		for i in range(self._led_strip.numPixels()):
-			strip.setPixelColor(i, Color(0, 0, 0))
-			strip.show()
+			self._led_strip.setPixelColor(i, Color(255, 0, 0))
+		self._led_strip.show()
+
+	def fill_screen(self, color):
+		# Clear screen 
+		r, g, b = color
+		c = Color(r, g, b)
+		for i in range(self._led_strip.numPixels()):
+			self._led_strip.setPixelColor(i, c)
+		self._led_strip.show()
+
+	def cords_to_pixnum(self, x, y, res):
+		return x + y * res
