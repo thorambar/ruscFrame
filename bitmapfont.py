@@ -25,7 +25,7 @@ class BitmapFont:
 		self._font_width, self._font_height = struct.unpack('BB', self._font.read(2))
 
 	def deinit(self):
-		self._font.close
+		self._font.close()
 
 	def __enter__(self):
 		self.init()
