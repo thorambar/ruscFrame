@@ -36,8 +36,9 @@ class BitmapFont:
 
 	def draw_char(self, ch, x, y, *args, **kwargs):
 		# Don't draw chars that are not on screen
-		if( x < -self._font_width or x >= self._width or y < -self._font_height or y >= self._height ):
-			return
+		if( x < -self._font_width or x >= self._width or \
+			y < -self._font_height or y >= self._height ):
+				return
 		# Go through the columns of chars
 		for char_x in range(self._font_width):
 			self._font.seek(2 + (ord(ch) * self._font_width) + char_x)

@@ -35,7 +35,7 @@ LED_PIN        = 18      # GPIO pin connected to the pixels (18 uses PWM!).
 #LED_PIN        = 10      # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
 LED_FREQ_HZ    = 800000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA        = 5       # DMA channel to use for generating signal (try 5)
-LED_BRIGHTNESS = 40     # Set to 0 for darkest and 255 for brightest
+LED_BRIGHTNESS = 5     # Set to 0 for darkest and 255 for brightest
 LED_INVERT     = False   # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 LED_STRIP      = ws.WS2811_STRIP_GRB   # Strip type and colour order
@@ -134,7 +134,7 @@ def pix_to_cords(num, res):
 	return ( (num % res), floor(num / res) )
 
 def draw_in_Matrix( x, y, matrix, color=(255, 0, 0) ):
-	matrix[y][x] = color
+	matrix[x][y] = color
 	return matrix
 
 
@@ -152,6 +152,11 @@ def matrix_to_strip(matrix, strip, res):
 			strip.setPixelColor(cords_to_pixnum(i, j, res), Color(a, b, c))
 	strip.show()
 
+def clear(strip):
+	for i in range(strip.numPixels()):
+		strip.setPixelColor(i, Color(0,0,0))
+		strip.show() 
+
 
 
 # ==== Main code ==========================================================
@@ -168,13 +173,23 @@ im = pil.Image.open('img/mario.jpg')
 nim = to_pix(im, resolutuion)
 matrix_to_strip(nim, strip, resolutuion)
 
-time.sleep(2)
+time.sleep(1)
 
 
 matrix = new_canvas(resolutuion)
+draw_in_Matrix(0, 0, matrix, (0,0,0))
 with bitmapfont.BitmapFont(resolutuion, resolutuion, draw_in_Matrix) as bf:
 	bf.text('hallo Welt', 2, 0, matrix, (94, 94, 2))
 matrix_to_strip(matrix, strip, resolutuion)	
+
+time.sleep(1)
+
+im = pil.Image.open('img/ball.jpg')
+nim = to_pix(im, resolutuion)
+matrix_to_strip(nim, strip, resolutuion)
+
+
+
 
 
 
