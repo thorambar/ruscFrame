@@ -7,6 +7,8 @@ from random import randint
 import frame
 import matrixdisplay
 import bitmapfont
+import gameoflife
+import random
 
 # ++++ Global vars +++++++++++++
 DDIM = 8
@@ -49,16 +51,28 @@ def draw_line( frame, sp=(0,0), ep=(0,0), color=(255, 255, 0) ):
 def main():
 	# create a connection to the display with size 8 
 	with matrixdisplay.MatrixDispaly(DDIM) as display:
+
+		while True:
+			game = gameoflife.GameOfLife(display, (179, 240, 0), 40)
+			#display.fill_screen((0, 255, 0))
+			#while True:	
+			game.play()
+			print 'new'
+
+			#display.fill_screen((0, 255, 255))
+
+
+
+
 		fr = frame.Frame(DDIM)
 		while True:
 			for i in range(0,8):
-				for j in range(0,8):
-					draw_line(fr, (i,j), (j,i), (randint(20,250), 0, randint(20,250) ))
-					display.draw_frame(fr)
-					#time.sleep(0.1)
-					#display.clear_screen()
-					#fr = frame.Frame(DDIM)
-					#time.sleep(0.1)
+				draw_line(fr, (i,0), (7-i,7), (250, 0, 10 ))
+				draw_line(fr, (0,i), (7,7-i), (0, 0, 255 ))
+				display.draw_frame(fr)
+				#time.sleep(0.1)
+			fr = frame.Frame(DDIM)
+			#time.sleep(0.1)
 
 
 		t = 0.09
