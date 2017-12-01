@@ -1,6 +1,7 @@
 # Simple game of life implementation for a square matrix
 
 import matrixdisplay
+from neopixel import *
 import frame
 import numpy 
 import random
@@ -15,6 +16,7 @@ class GameOfLife:
 		self._new_grid = numpy.zeros((self._N, self._N, 1), dtype='i')
 		self._color = color
 		self._T = T
+		self._strip = self._display.get_strip()
 
 		# Create random initial configuration 
 		for i in range(0, self._N):
@@ -41,44 +43,35 @@ class GameOfLife:
 		return s
 
 	def play(self):
+		r, g, b = self._color
 		print 'now Playing'
 		t = 1 # Current time level
 		write_frequency = 5 # How frequently the output gets drawn 
 		while(t <= self._T):
-			#print self._T, '----------------------------------'
-			#print self._old_grid
-
+			stillAllive = 0
 			for i in range(self._N):
 				for j in range(self._N):
 					live = self.live_neigbours(i, j)
 					if(self._old_grid[i][j] == 1 and live < 2):
 						self._new_grid[i][j] = 0 # Dead from starvation 
+						self._strip.setPixelColor( (i + j * self._N), Color(0, 0, 0) )
+						stillAllive += 1
 					if(self._old_grid[i][j] == 1 and (live == 2 or live == 3)):
 						self._new_grid[i][j] = 1 # Continue living
+						self._strip.setPixelColor( (i + j * self._N), Color(r, g, b) )
+						stillAllive += 1
 					if(self._old_grid[i][j] == 1 and live > 3):
 						self._new_grid[i][j] = 0 # Dead from overcrowding
+						self._strip.setPixelColor( (i + j * self._N), Color(0, 0, 0) )
+						stillAllive += 1
 					if(self._old_grid[i][j] == 0 and live == 3):
 						self._new_grid[i][j] = 1 # Alive from reproduction 
-			
-			# Draw frame on display
-			#if(t % write_frequency == 0):
-			start = time.time()
-			if True:
-				fr = frame.Frame(self._N)
-				frmat = fr._get_matrix()
-				for x in range(0, self._N):
-					for y in range(0, self._N):
-						if (self._old_grid[x][y] == 1):
-							fr.set_pixel(x, y, self._color)
-							frmat[x][y] = self._color
-							#self._display._write_to_buffer(x, y, self._color)
-						#else:
-							#self._display._write_to_buffer(x, y, (0, 0, 0))
-				self._display.draw_frame(fr)
-				#self._display._write_out_buffer()
-			end = time.time()
-			print (end - start)
+						self._strip.setPixelColor( (i + j * self._N), Color(r, g, b) )
+						stillAllive += 1		
 
+			if(stillAllive == 0):
+				return # Return when it has died out changing 
+			self._display._write_out_buffer()
 			self._old_grid = self._new_grid.copy()
 			t += 1		
 

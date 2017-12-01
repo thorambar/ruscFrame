@@ -65,6 +65,9 @@ class MatrixDispaly:
 	def get_brightnes(self):
 		return self._led_brightness
 
+	def get_strip(self):
+		return self._led_strip
+
 	def get_dim(self):
 		return self._led_dim
 

@@ -56,6 +56,7 @@ def main():
 			game = gameoflife.GameOfLife(display, (179, 240, 0), 40)
 			#display.fill_screen((0, 255, 0))
 			#while True:	
+			display.clear_screen()
 			game.play()
 			#print 'new'
 
