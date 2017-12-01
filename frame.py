@@ -32,9 +32,9 @@ class Frame:
 			x, y, color = elem
 			self._matrix[x][y] = color
 
-	def get_matrix_(self):
+	def _get_matrix(self):
 		# Basically should not be used, maybe gets removed, but also maybe faster, TODO test it
-		return sellf._matrix
+		return self._matrix
 
 	def get_pixel(self, x, y):
 		return self._matrix[x][y]

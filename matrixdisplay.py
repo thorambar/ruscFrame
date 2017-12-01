@@ -43,13 +43,20 @@ class MatrixDispaly:
 		self.deinit()
 
 	def draw_frame(self, frame):
-		#print id(self)
 		# Will only need a frame of RGB values and draws it
 		for i in range(0, self._led_dim):
 			for j in range(0, self._led_dim):
 				r, g, b = frame.get_pixel(i, j)
 				self._led_strip.setPixelColor( self.cords_to_pixnum(i, j, self._led_dim), Color(r, g, b) )
-		self._led_strip.show()	
+		self._led_strip.show()
+
+	def _write_to_buffer(self, x, y, color):
+		r, g, b = color
+		self._led_strip.setPixelColor( self.cords_to_pixnum(x, y, self._led_dim), Color(r, g, b) )
+
+	def _write_out_buffer(self):
+		self._led_strip.show()
+
 
 	def set_brigtnes(self, brightness):
 		self._led_brightness = brightness

@@ -13,7 +13,6 @@ class GameOfLife:
 		self._N = self._display.get_dim()
 		self._old_grid = numpy.zeros((self._N, self._N, 1), dtype='i')
 		self._new_grid = numpy.zeros((self._N, self._N, 1), dtype='i')
-							#np.zeros( (dim, dim, 3), dtype=np.uint8 )
 		self._color = color
 		self._T = T
 
@@ -63,14 +62,22 @@ class GameOfLife:
 			
 			# Draw frame on display
 			#if(t % write_frequency == 0):
+			start = time.time()
 			if True:
 				fr = frame.Frame(self._N)
+				frmat = fr._get_matrix()
 				for x in range(0, self._N):
 					for y in range(0, self._N):
 						if (self._old_grid[x][y] == 1):
 							fr.set_pixel(x, y, self._color)
+							frmat[x][y] = self._color
+							#self._display._write_to_buffer(x, y, self._color)
+						#else:
+							#self._display._write_to_buffer(x, y, (0, 0, 0))
 				self._display.draw_frame(fr)
-				#time.sleep(0.5)
+				#self._display._write_out_buffer()
+			end = time.time()
+			print (end - start)
 
 			self._old_grid = self._new_grid.copy()
 			t += 1		

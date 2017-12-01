@@ -57,7 +57,7 @@ def main():
 			#display.fill_screen((0, 255, 0))
 			#while True:	
 			game.play()
-			print 'new'
+			#print 'new'
 
 			#display.fill_screen((0, 255, 255))
 
