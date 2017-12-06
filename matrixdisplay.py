@@ -13,7 +13,7 @@ import sys
 
 class MatrixDispaly:
 
-	def __init__(self, dim, ledpin=18, ledfreq=800000, leddma=5, ledbrightness=1, inverted=False, ledchannel=0, ledstriptype=ws.WS2811_STRIP_GRB):
+	def __init__(self, dim, ledpin=18, ledfreq=800000, leddma=5, ledbrightness=2, inverted=False, ledchannel=0, ledstriptype=ws.WS2811_STRIP_GRB):
 		# LED strip configuration:
 		self._led_dim = dim
 		self._led_count = dim * dim
@@ -30,7 +30,6 @@ class MatrixDispaly:
 		self._led_strip = Adafruit_NeoPixel(self._led_count, self._led_pin, self._led_freq_hz, self._led_dma, \
 			self._led_invert, self._led_brightness, self._led_channel, self._led_strip_type)
 		self._led_strip.begin()
-
 
 	def deinit(self):
 		self.clear_screen
@@ -56,7 +55,6 @@ class MatrixDispaly:
 
 	def _write_out_buffer(self):
 		self._led_strip.show()
-
 
 	def set_brigtnes(self, brightness):
 		self._led_brightness = brightness
@@ -88,5 +86,5 @@ class MatrixDispaly:
 			self._led_strip.setPixelColor(i, c)
 		self._led_strip.show()
 
-	def cords_to_pixnum(self, x, y, res):
-		return x + y * res
+	def cords_to_pixnum(self, y, x, res):
+	   	return (x % 8 + y % 8 *8) + x/8 * 64 + y/8 *128

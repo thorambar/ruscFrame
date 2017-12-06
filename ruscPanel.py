@@ -10,9 +10,22 @@ import bitmapfont
 import gameoflife
 import random
 
-# ++++ Global vars +++++++++++++
-DDIM = 8
+from neopixel import *
+import PIL as pil
+from PIL import ImageFont, ImageDraw
+import numpy as np
 
+# ++++ Global vars +++++++++++++
+DDIM = 16
+
+def to_pix(image):
+	img = image.resize((DDIM, DDIM)).convert('RGB') # AA maybe bad
+	pixels = frame.Frame(DDIM) # 8 bit for 0-255 values of RGB
+	for i in range(0, DDIM):
+		for j in range(0, DDIM):
+			#pixels[j][i] = img.getpixel((i, j)) # for some reason correctly rotated
+			pixels.set_pixel( j, i, img.getpixel((i, j)) )
+	return pixels
 
 def draw_line( frame, sp=(0,0), ep=(0,0), color=(255, 255, 0) ):
 	# Bresenham-Line Algorithm
@@ -48,28 +61,29 @@ def draw_line( frame, sp=(0,0), ep=(0,0), color=(255, 255, 0) ):
 		x, y = obj
 		frame.set_pixel(x, y, color)
 
+
+
+
 def main():
 	# create a connection to the display with size 8 
 	with matrixdisplay.MatrixDispaly(DDIM) as display:
+		im = pil.Image.open('img/mario.jpg')
+		display.draw_frame(to_pix(im))
+		time.sleep(5)
 
 		while True:
-			game = gameoflife.GameOfLife(display, (179, 240, 0), 40)
-			#display.fill_screen((0, 255, 0))
-			#while True:	
+			game = gameoflife.GameOfLife(display, (179, 240, 0), 100)
 			display.clear_screen()
 			game.play()
-			#print 'new'
-
-			#display.fill_screen((0, 255, 255))
 
 
 
 
 		fr = frame.Frame(DDIM)
 		while True:
-			for i in range(0,8):
-				draw_line(fr, (i,0), (7-i,7), (250, 0, 10 ))
-				draw_line(fr, (0,i), (7,7-i), (0, 0, 255 ))
+			for i in range(0,16):
+				draw_line(fr, (i,0), (15-i,15), (250, 0, 10 ))
+				draw_line(fr, (0,i), (15,15-i), (0, 0, 255 ))
 				display.draw_frame(fr)
 				#time.sleep(0.1)
 			fr = frame.Frame(DDIM)

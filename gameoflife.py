@@ -42,6 +42,9 @@ class GameOfLife:
 					s += self._old_grid[0][0]
 		return s
 
+	def px_to_string(self, x, y):
+		return (x % 8 + y % 8 *8) + x/8 * 64 + y/8 *128
+
 	def play(self):
 		r, g, b = self._color
 		print 'now Playing'
@@ -54,20 +57,21 @@ class GameOfLife:
 					live = self.live_neigbours(i, j)
 					if(self._old_grid[i][j] == 1 and live < 2):
 						self._new_grid[i][j] = 0 # Dead from starvation 
-						self._strip.setPixelColor( (i + j * self._N), Color(0, 0, 0) )
+						self._strip.setPixelColor( self.px_to_string(i, j), Color(0, 0, 255) )
 						stillAllive += 1
 					if(self._old_grid[i][j] == 1 and (live == 2 or live == 3)):
 						self._new_grid[i][j] = 1 # Continue living
-						self._strip.setPixelColor( (i + j * self._N), Color(r, g, b) )
-						stillAllive += 1
+						self._strip.setPixelColor( self.px_to_string(i, j), Color(r, g, b) )
+						#stillAllive += 1
 					if(self._old_grid[i][j] == 1 and live > 3):
 						self._new_grid[i][j] = 0 # Dead from overcrowding
-						self._strip.setPixelColor( (i + j * self._N), Color(0, 0, 0) )
+						self._strip.setPixelColor( self.px_to_string(i, j), Color(0, 0, 255) )
 						stillAllive += 1
 					if(self._old_grid[i][j] == 0 and live == 3):
 						self._new_grid[i][j] = 1 # Alive from reproduction 
-						self._strip.setPixelColor( (i + j * self._N), Color(r, g, b) )
+						self._strip.setPixelColor( self.px_to_string(i, j), Color(r, g, b) )
 						stillAllive += 1		
+			#time.sleep(0.2)			
 
 			if(stillAllive == 0):
 				return # Return when it has died out changing 
